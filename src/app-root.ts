@@ -23,7 +23,7 @@ export class AppRoot extends LitElement {
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        height: 100vh;
+        height: 100%;
         background-color: #2196f3;
         background: linear-gradient(315deg, #b4d2ea 0%, #2196f3 100%);
         font-size: 24px;

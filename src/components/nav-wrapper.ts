@@ -17,8 +17,11 @@ export class NavWrapper extends LitElement {
 
   static get styles() {
     return css`
+      * {
+        --header-height: 45px;
+      }
       #base {
-        height: 100vh;
+        /* height: 100vh; */
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr auto;
@@ -29,7 +32,6 @@ export class NavWrapper extends LitElement {
       }
       #base > header {
         grid-area: header;
-        padding: 10px;
         text-align: start;
         background: red;
         color: white;
@@ -37,6 +39,14 @@ export class NavWrapper extends LitElement {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        height: var(--header-height);
+      }
+      #base > header > * {
+        padding: 10px;
       }
       #base > footer {
         grid-area: footer;
@@ -46,7 +56,8 @@ export class NavWrapper extends LitElement {
       }
       #base > main {
         grid-area: main;
-        /* padding: 15px 5px 10px 5px; */
+        margin-top: var(--header-height);
+        height: calc(100vh - (var(--header-height) * 2) + 10px);
       }
       .actionItems {
         padding: 0px;
