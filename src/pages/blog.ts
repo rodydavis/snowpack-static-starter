@@ -6,10 +6,10 @@ import {
   css,
   TemplateResult,
 } from 'lit-element';
-import './components/nav-wrapper';
+import '../components/nav-wrapper';
 
-@customElement('app-root')
-export class AppRoot extends LitElement {
+@customElement('blog-page')
+export class BlogPage extends LitElement {
   @property() message = 'Learn LitElement';
 
   static get styles() {
@@ -35,7 +35,7 @@ export class AppRoot extends LitElement {
 
   render() {
     return html`
-      <nav-wrapper>
+      <nav-wrapper title="Blog">
         <div class="wrapper">
           <h1>LitElement + Snowpack</h1>
           <p>Edit <code>src/app-root.ts</code> and save to reload.</p>
