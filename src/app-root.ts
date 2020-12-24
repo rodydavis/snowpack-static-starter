@@ -19,6 +19,7 @@ export class AppRoot extends LitElement {
       }
       .wrapper {
         display: flex;
+        color: white;
         justify-content: center;
         align-items: center;
         flex-direction: column;

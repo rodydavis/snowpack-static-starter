@@ -15,7 +15,6 @@ export class BlogPage extends LitElement {
 
   async firstUpdated() {
     window.addEventListener('popstate', () => this.checkUrl());
-    this.checkUrl();
   }
 
   connectedCallback() {
@@ -60,8 +59,19 @@ export class BlogPage extends LitElement {
         color: black;
         background-color: white;
       }
+      .not-found {
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: black;
+        background-color: white;
+      }
     `;
   }
+
+  show404 = false;
 
   render() {
     if (this.id.length > 0) {
@@ -73,9 +83,13 @@ export class BlogPage extends LitElement {
           </article>
         </nav-wrapper>`;
       }
-      return html` <nav-wrapper title="Blog Id -> ${this.id}">
-        <div>Post Not Found!</div>
-      </nav-wrapper>`;
+      if (this.show404) {
+        return html` <nav-wrapper title="Blog Id -> ${this.id}">
+          <div class="not-found">Post Not Found!</div>
+        </nav-wrapper>`;
+      } else {
+        alert('Post Not Found!');
+      }
     }
     return html`
       <nav-wrapper title="${'Blog'}">
