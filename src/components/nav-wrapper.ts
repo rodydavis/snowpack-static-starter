@@ -17,7 +17,18 @@ export class NavWrapper extends LitElement {
 
   static get styles() {
     return css`
-      header {
+      #base {
+        height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas:
+          'header'
+          'main'
+          'footer';
+      }
+      #base > header {
+        grid-area: header;
         padding: 10px;
         text-align: start;
         background: red;
@@ -27,10 +38,15 @@ export class NavWrapper extends LitElement {
         flex-direction: row;
         justify-content: space-between;
       }
-      footer {
+      #base > footer {
+        grid-area: footer;
         padding: 10px;
         background: grey;
         color: white;
+      }
+      #base > main {
+        grid-area: main;
+        /* padding: 15px 5px 10px 5px; */
       }
       .actionItems {
         padding: 0px;
@@ -45,41 +61,28 @@ export class NavWrapper extends LitElement {
         padding: 0;
         margin: 0;
       }
+      slot {
+        grid-area: main;
+      }
     `;
   }
 
   render() {
     return html`
-      <style>
-        ${this.dynamicStyle()}
-      </style>
-      ${this.showHeader
-        ? html`<header>
-            <h2>${this.title}</h2>
-            <div class="actionItems">
-              ${this.menuItem('Home', '/')}
-              ${this.menuItem('Blog', '/blog')}
-              ${this.menuItem('About', '/about')}
-            </div>
-          </header>`
-        : nothing}
-      <slot></slot>
-      ${this.showFooter ? html`<footer>Copyright 2020</footer>` : nothing}
+      <div id="base">
+        ${this.showHeader
+          ? html`<header>
+              <h2>${this.title}</h2>
+              <div class="actionItems">
+                ${this.menuItem('Home', '/')} ${this.menuItem('Blog', '/blog')}
+                ${this.menuItem('About', '/about')}
+              </div>
+            </header>`
+          : nothing}
+        <main><slot></slot></main>
+        ${this.showFooter ? html`<footer>Copyright 2020</footer>` : nothing}
+      </div>
     `;
-  }
-
-  private dynamicStyle(): string {
-    if (this.fixed) {
-      return `
-      header {
-        position: fixed;
-        left: 0px;
-        right: 0px;
-        top: 0px;
-      }
-      `;
-    }
-    return '';
   }
 
   private menuItem(label: string, route: string): TemplateResult {

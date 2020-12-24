@@ -6,17 +6,30 @@ import {
   css,
   TemplateResult,
 } from 'lit-element';
+import { getURLParam } from '../utils/routing';
 import '../components/nav-wrapper';
 
 @customElement('blog-page')
 export class BlogPage extends LitElement {
-  @property() message = 'Learn LitElement';
+  @property({ type: String }) id = '';
+
+  async firstUpdated() {
+    window.addEventListener('popstate', () => this.checkUrl());
+    this.checkUrl();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.checkUrl();
+  }
+
+  private checkUrl() {
+    this.id = getURLParam('id') || '';
+    this.requestUpdate();
+  }
 
   static get styles() {
     return css`
-      h1 {
-        font-size: 4rem;
-      }
       .wrapper {
         display: flex;
         justify-content: center;
@@ -27,28 +40,76 @@ export class BlogPage extends LitElement {
         background: linear-gradient(315deg, #b4d2ea 0%, #2196f3 100%);
         font-size: 24px;
       }
-      .link {
-        color: white;
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: auto;
+        grid-gap: 1rem;
+        padding: 10px;
+      }
+      .card {
+        height: 200px;
+        border: 2px solid #e7e7e7;
+        border-radius: 4px;
+        padding: 0.5rem;
+        color: black;
+        background-color: snow;
+      }
+      article {
+        padding-left: 20px;
+        color: black;
+        background-color: white;
       }
     `;
   }
 
   render() {
+    if (this.id.length > 0) {
+      const post = posts.filter((post) => post.id === this.id)[0];
+      if (post) {
+        return html` <nav-wrapper title="Blog Id -> ${this.id}">
+          <article>
+            <h2>${post.title}</h2>
+          </article>
+        </nav-wrapper>`;
+      }
+      return html` <nav-wrapper title="Blog Id -> ${this.id}">
+        <div>Post Not Found!</div>
+      </nav-wrapper>`;
+    }
     return html`
-      <nav-wrapper title="Blog">
-        <div class="wrapper">
-          <h1>LitElement + Snowpack</h1>
-          <p>Edit <code>src/app-root.ts</code> and save to reload.</p>
-          <a
-            class="link"
-            href="https://lit-element.polymer-project.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            ${this.message}
-          </a>
+      <nav-wrapper title="${'Blog'}">
+        <div class="cards">
+          ${posts.map(
+            (post) => html` <div
+              class="card"
+              @click=${() => (window.location.href = `/blog?id=${post.id}`)}
+            >
+              <h2>${post.title}</h2>
+            </div>`,
+          )}
         </div>
       </nav-wrapper>
     `;
   }
 }
+
+interface Post {
+  id: string;
+  title: string;
+}
+
+const posts: Post[] = [
+  {
+    id: '1234',
+    title: 'My First Post',
+  },
+  {
+    id: '2345',
+    title: 'My Second Post',
+  },
+  {
+    id: '3456',
+    title: 'My Third Post',
+  },
+];
